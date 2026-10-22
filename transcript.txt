@@ -1,0 +1,164 @@
+Generate a python script which:
+- asks for a search term
+- displays a welcome message
+- simulates retrieving data
+- displays a summary
+===========================
+Please add comments to the script so that it can be easily understood by a novice programmer.
+===========================
+Once the summary is displayed, ask "would you like me to google {search term} for you?
+If the answer is y, retrieve the top 5 results from google.
+[asks if we should use credentials for API or open browser. Chose the latter.]
+===========================
+How could I impove these prompts to achieve the same result?
+You can make the prompts more specific by stating the expected flow and clarifying what “retrieve Google results” means. For example:
+Update main.py to:
+• Display a welcome message and ask the user for a search term.
+• Simulate retrieving data, then display a short summary with three sample results.
+• After the summary, ask exactly: Would you like me to google {search term} for you?
+• If the user answers y (case-insensitive), open a Google search for that term in the default browser, requesting five results per page. If they answer anything else, do nothing.
+• Keep the code beginner-friendly and add comments explaining the main steps.
+• Use only Python’s standard library. Make clear that opening Google is not the same as fetching results into the script.
+The last point matters: if you want the five result titles and links displayed in the terminal, specify that directly and ask for an API-based solution; opening a browser only shows Google’s results page.
+===========================
+git remote add origin https://github.com/Alex-Student03/Day2Project1.git
+git branch -M main
+git push -u origin main
+===========================
+Please create a README.md file and populate with a user-friendly explanation of this project and usage.
+===========================
+refactor this code into clear, understandable and re-useable functions.
++commit
+===========================
+
+===========================
+===========================
+===========================
+===========================
+===========================
+===========================
+===========================
+
+===========================
+Write Python code to call the TVMaze API
+Explain the requests.get() function 
+Show me how to convert JSON into Python dictionaries
+Add error handling to this API request
+Explain each line of the generated code
+
+Thinking
+Ran
+Get-ChildItem -Force
+Read
+main.py
+Edited File
+main.py
++0 -16
+Edited File
+main.py
++33 -0
+Thinking
+Ran
+python -m py_compile main.py; if ($?) { python main.py }
+Thinking
+Ran
+.\.venv\Scripts\python.exe -m py_compile main.py; if ($?) { .\.venv\Scripts\python.exe -c "import requests; print(requests.__version__)" }
+Thinking
+Edited File
+main.py
++3 -3
+Edited File
+requirements.txt
++1 -0
+Ran
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt; if ($?) { .\.venv\Scripts\python.exe -m py_compile main.py }; if ($?) { .\.venv\Scripts\python.exe main.py }
+Thinking
+I added the TVMaze search example to main.py and requests to requirements.txt. It searches for “The Office,” converts the JSON response into Python objects, and handles HTTP, connection, and invalid-JSON errors.
+import requests
+
+
+def search_shows(query):
+    url = "https://api.tvmaze.com/search/shows"
+    params = {"q": query}
+
+    try:
+        response = requests.get(url, params=params, timeout=10)
+        response.raise_for_status()
+        shows = response.json()
+    except requests.exceptions.JSONDecodeError as error:
+        print(f"TVMaze returned invalid JSON: {error}")
+        return
+    except requests.exceptions.HTTPError as error:
+        print(f"TVMaze returned an HTTP error: {error}")
+        return
+    except requests.exceptions.RequestException as error:
+        print(f"Could not connect to TVMaze: {error}")
+        return
+
+    if not shows:
+        print(f"No shows found for {query!r}.")
+        return
+
+    for result in shows:
+        show = result["show"]
+        print(f"{show['name']} ({show.get('premiered') or 'premiere date unknown'})")
+        print(f"  URL: {show['url']}")
+
+
+if __name__ == "__main__":
+    search_shows("The Office")
+Line-by-line explanation
+•
+import requests — Imports the requests library, which provides convenient HTTP functions.
+•
+def search_shows(query): — Defines a function that searches TVMaze for the supplied text.
+•
+url = ... — Sets the TVMaze show-search API endpoint.
+•
+params = {"q": query} — Creates the URL query parameter. With "The Office", Requests sends a URL like ...?q=The+Office.
+•
+try: — Starts a block where request and response errors are handled.
+•
+requests.get(url, params=params, timeout=10) — Sends an HTTP GET request. params encodes the search query in the URL, and timeout=10 prevents waiting indefinitely.
+•
+response.raise_for_status() — Raises an HTTP error if the server responds with a failure status, such as 404 or 500.
+•
+response.json() — Parses the response body from JSON into Python values. TVMaze returns a list of dictionaries; each result contains a "show" dictionary.
+•
+except requests.exceptions.JSONDecodeError ... — Handles a response that could not be parsed as JSON.
+•
+except requests.exceptions.HTTPError ... — Handles an unsuccessful HTTP status from the server.
+•
+except requests.exceptions.RequestException ... — Handles other request problems, such as connection or timeout errors.
+•
+Each print(...) inside an error handler displays the problem; return exits the function instead of continuing with an invalid response.
+•
+if not shows: — Checks whether the returned list is empty.
+•
+print(...) — Reports that no matches were found.
+•
+for result in shows: — Iterates through the list of search-result dictionaries.
+•
+show = result["show"] — Gets the show dictionary from the current search result.
+•
+The next print(...) displays the show’s name and premiere date. .get("premiered") safely handles a missing date.
+•
+The final print(...) displays the show’s TVMaze URL.
+•
+if name == "main": — Runs the example search when you execute this file directly.
+•
+search_shows("The Office") — Calls the function with the example query.
+To install the dependency in your project environment, run python -m pip install -r requirements.txt. I also ran the example successfully against TVMaze.
+===========================
+Write Python code to get the weather forecast for the next 7 days..
+The code should ask for the location for the forecast.
+Recommend what clothing is likely to be most appropriate for each day.
+Explain the generated code
+-----
+Can you turn this into a GUI with weather symbols and a dropdown which remebers the last 10 locations chosen, but also allows new locations to be keyed.
+-----
+_tkinter.TclError: Can't find a usable init.tcl in the following directories: ...
+Can you fix this
+(worked)
+-----
+please make the icon scheme more colourful
